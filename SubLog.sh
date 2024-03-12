@@ -64,18 +64,19 @@ while getopts ":w:" opt; do
     esac
 done
 shift $((OPTIND -1))
-
+if [ -n "$wordlist" ]; then
+    # Check if the specified wordlist exists
+    if [ ! -f "$wordlist" ]; then
+        echo "Error: Wordlist '$wordlist' not found."
+        exit 1
+    fi
+fi
 # Check if domain is provided
 if [ $# -ne 1 ]; then
     usage
 fi
 
 domain="$1"
-
-# Default wordlist if not provided
-if [ -z "$wordlist" ]; then
-    wordlist="../default_wordlist.txt"
-fi
 
 # Step 1: Find subdomains using sublist3r
 echo
@@ -92,23 +93,50 @@ subfinder  -silent  -d $domain > subfinder.tmp.txt
 echo
 echo -e  "${BLUE}[3]${NC} ${YELLOW}Subdomain bruteforce using puredns.${NC}"
 echo -e "${RED}NOTE: ${NC}This might take some time (30-35 mins)."
-# Define the folder containing the lists
-folder="../subdomain-wordlists"
-counter=0
-# Iterate over each file in the folder
-for list in "$folder"/*; do
-    # Check if the file exists and is a regular file
-    if [ -f "$list" ]; then
-        counter=$((counter + 1))
-        # Run PureDNS command with the current file
-         puredns -q bruteforce --rate-limit-trusted 0 --resolvers-trusted ../resolv.txt $list --trusted-only $domain > puredns-file-${counter}.txt
-        # Print message indicating completion
-        echo
-        echo -e "${YELLOW}[+]${NC} ${GREEN}Subdomain bruteforce wordlist ${counter} completed. 🗸${NC}"
-        echo
-        sleep 10
-    fi
-done
+# Check if the custom wordlist file exists
+if [ -f "$wordlist" ]; then
+
+    # Create a directory to store the divided wordlists
+    mkdir -p divided_wordlists
+    
+    # Split the custom wordlist into 10 parts
+    split -n 10 "$wordlist" divided_wordlists/part-
+     counter=0
+     folder="divided_wordlists"
+     for list in "$folder"/*; do
+        if [ -f "$list" ]; then
+          counter=$((counter + 1))
+          # Run PureDNS command with the current divided wordlist
+          puredns -q bruteforce --rate-limit-trusted 0 --resolvers-trusted ../resolv.txt "$list" --trusted-only "$domain" > "puredns-file-${counter}.txt"
+          # Print message indicating completion
+          echo
+          echo -e "${YELLOW}[+]${NC} ${GREEN}Subdomain bruteforce with divided wordlist $list completed. 🗸${NC}"
+          echo
+          sleep 10
+        fi
+    done
+
+    # Remove the divided wordlists
+    rm -rf divided_wordlists
+else
+    # Iterate over each file in the folder
+    counter=0
+    folder="../subdomain-wordlists"
+    for list in "$folder"/*; do
+        # Check if the file exists and is a regular file
+        if [ -f "$list" ]; then
+            counter=$((counter + 1))
+            # Run PureDNS command with the current file
+            puredns -q bruteforce --rate-limit-trusted 0 --resolvers-trusted ../resolv.txt "$list" --trusted-only "$domain" > "puredns-file-${counter}.txt"
+            # Print message indicating completion
+            echo
+            echo -e "${YELLOW}[+]${NC} ${GREEN}Subdomain bruteforce wordlist ${counter} completed. 🗸${NC}"
+            echo
+            sleep 10
+        fi
+    done
+fi
+
 cat puredns-file-* | sort | uniq > puredns.tmp.txt
 rm puredns-file-*
 
@@ -122,7 +150,7 @@ curl -s "https://crt.sh/?q=%.$domain&output=json" | jq -r '.[].name_value' | sed
 echo -e -n "${BLUE}[5]${NC} ${YELLOW} Combining all subdomains in subdomains.txt${NC}"
 cat sublist3r.tmp.txt subfinder.tmp.txt  puredns.tmp.txt crtsh.tmp.txt| sort | uniq > subdomains.txt
 echo
-echo -e "${YELLOW}Found subdomains are saved in subdomains.txt.${NC}"
+echo -e "${PURPLE}[+]${NC}${YELLOW} Found subdomains are saved in subdomains.txt.${NC}"
 # Step 6: Perform port scanning with naabu
 echo
 echo -e "${BLUE}[6]${NC} ${YELLOW} Scanning ports on each subdomain using naabu${NC}"
