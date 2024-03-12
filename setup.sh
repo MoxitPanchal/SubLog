@@ -45,6 +45,6 @@ rm -rf massdns
 
 # Install puredns
 go install github.com/d3mondev/puredns/v2@latest
-export PATH=\$PATH:$(go env GOPATH)/bin
-echo "export PATH=\$PATH:$(go env GOPATH)/bin" >> ~/.bashrc
-echo "export PATH=\$PATH:$(go env GOPATH)/bin" >> ~/.zshrc
+export PATH=$PATH:$(go env GOPATH)/bin
+echo "export PATH=$PATH:$(go env GOPATH)/bin" >> ~/.bashrc
+echo "export PATH=$PATH:$(go env GOPATH)/bin" >> ~/.zshrc
