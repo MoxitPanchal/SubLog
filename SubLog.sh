@@ -23,25 +23,6 @@ usage() {
     echo "Usage: $0 [-w wordlist_file] <domain>"
     exit 1
 }
-
-# Ask for folder name
-echo -n -e "${YELLOW}Enter the folder name to save the text files: ${NC}" 
-read folder_name
-
-# Check if folder name is provided
-if [ -z "$folder_name" ]; then
-    echo -e "${RED}Error: Folder name cannot be empty.${NC}"
-    exit 1
-fi
-
-# Check if folder exists, if not create it
-if [ ! -d "$folder_name" ]; then
-    mkdir "$folder_name"
-fi
-
-# Change to the folder directory
-cd "$folder_name" || exit 1
-
 # Check if at least domain is provided as an argument
 if [ $# -lt 1 ]; then
     usage
@@ -77,6 +58,25 @@ if [ $# -ne 1 ]; then
 fi
 
 domain="$1"
+# Ask for folder name
+echo -n -e "${YELLOW}Enter the folder name to save the text files: ${NC}" 
+read folder_name
+
+# Check if folder name is provided
+if [ -z "$folder_name" ]; then
+    echo -e "${RED}Error: Folder name cannot be empty.${NC}"
+    exit 1
+fi
+
+# Check if folder exists, if not create it
+if [ ! -d "$folder_name" ]; then
+    mkdir "$folder_name"
+fi
+
+# Change to the folder directory
+cd "$folder_name" || exit 1
+
+
 
 # Step 1: Find subdomains using sublist3r
 echo
