@@ -18,7 +18,7 @@ SubLog is a script for enumerating subdomains using various techniques and sourc
 
 1. Clone the repository:
 
-```bash
+```code
 git clone https://github.com/yourusername/SubLog.git
 ```
 2. Navigate to the SubLog directory:
