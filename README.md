@@ -29,19 +29,19 @@ chmod +x *.sh
 ```
 3. Run `setup.sh` to install dependencies:
 ```python
-sudo ./setup.sh
+./setup.sh
 ```
 4. Run `SubLog.sh`:
 ```sh
-sudo ./SubLog.sh <domain>
+./SubLog.sh <domain>
 ```
 # Example Usage
 ```sh
-sudo ./SubLog.sh google.com
+./SubLog.sh google.com
 ```
 To use custom wordlist for bruteforce, `-w` option can be used.
 ```sh
-sudo ./SubLog.sh -w /path/to/custom-wordlist.txt google.com
+./SubLog.sh -w /path/to/custom-wordlist.txt google.com
 ```
 # Contribution
 SubLog was created with the aim of simplifying the everyday task of subdomain enumeration. By leveraging various tools and techniques, SubLog provides a comprehensive approach to discovering subdomains associated with a domain. 
