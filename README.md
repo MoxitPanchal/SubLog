@@ -44,10 +44,7 @@ To use custom wordlist for bruteforce, `-w` option can be used.
 ```sh
 sudo ./SubLog.sh -w /path/to/custom-wordlist.txt google.com
 ```
-## Contributing
-Contributions are welcomed! If you encounter any issues or have suggestions for improvements, please open an issue or submit a pull request.
-
----
+## Contribution
 SubLog was created with the aim of simplifying the everyday task of subdomain enumeration. By leveraging various tools and techniques, SubLog provides a comprehensive approach to discovering subdomains associated with a domain. 
 If you have any questions, suggestions, or feedback, feel free to reach out to me:
 
@@ -55,3 +52,6 @@ If you have any questions, suggestions, or feedback, feel free to reach out to m
 - LinkedIn: [Moxit Panchal](https://www.linkedin.com/in/moxit-panchal-545303225/)
 
 I'm open to collaboration and always eager to hear from fellow developers and security enthusiasts!
+
+---
+Made with 🖤 by Moxit.
