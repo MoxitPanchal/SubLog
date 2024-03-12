@@ -1,25 +1,24 @@
-# SubLog
+<h1 align="center">
+  <img src="Static/Logo.png" alt="naabu" width="800px">
+  <br>
+</h1>
 
-## Description
-
-SubLog is a script for enumerating subdomains using various techniques and sources. It provides a convenient way to discover subdomains associated with a target domain.
-
-## Features
+# Features
 
 - Enumerate subdomains using various tools and crt.sh.
 - Bruteforce subdomains with extensive [wordlist](https://wordlists-cdn.assetnote.io/data/automated/httparchive_subdomains_2024_01_28.txt) containing more than 2 million entries.
 - Perform port scanning and HTTP/HTTPS accessibility checks.
 - Check if HTTP accessible subdomains redirect to HTTPS.
 
-### Upcoming Features
+## Upcoming Features
 - Automatically fetch screenshots and HTML content of subdomains.
 - Integrate with other tools for further analysis and processing.
 
-## Installing SubLog
+# Installing SubLog
 ```python
 git clone https://github.com/MoxitPanchal/SubLog.git
 ```
-## Running SubLog
+# Running SubLog
 1. Navigate to the SubLog directory:
 ```python
 cd SubLog
@@ -36,7 +35,7 @@ sudo ./setup.sh
 ```sh
 sudo ./SubLog.sh <domain>
 ```
-## Example Usage
+# Example Usage
 ```sh
 sudo ./SubLog.sh google.com
 ```
@@ -44,7 +43,7 @@ To use custom wordlist for bruteforce, `-w` option can be used.
 ```sh
 sudo ./SubLog.sh -w /path/to/custom-wordlist.txt google.com
 ```
-## Contribution
+# Contribution
 SubLog was created with the aim of simplifying the everyday task of subdomain enumeration. By leveraging various tools and techniques, SubLog provides a comprehensive approach to discovering subdomains associated with a domain. 
 If you have any questions, suggestions, or feedback, feel free to reach out to me:
 
