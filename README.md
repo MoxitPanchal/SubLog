@@ -3,7 +3,7 @@
 ## Description
 
 SubLog is a script for enumerating subdomains using various techniques and sources. It provides a convenient way to discover subdomains associated with a target domain.
-https://github.com/MoxitPanchal/SubLog/edit/main/README.md
+
 ## Features
 
 - Enumerate subdomains using tools like sublist3r, subfinder, and dnsenum.
@@ -20,3 +20,9 @@ https://github.com/MoxitPanchal/SubLog/edit/main/README.md
 
 ```bash
 git clone https://github.com/yourusername/SubLog.git
+```
+2. Navigate to the SubLog directory:
+```console
+cd SubLog
+```
+3.
