@@ -147,13 +147,13 @@ echo
 curl -s "https://crt.sh/?q=%.$domain&output=json" | jq -r '.[].name_value' | sed 's/\*\.//g' | sort -u  >  crtsh.tmp.txt
 
 # Step 5: Make a list of all unique subdomains from the temporary files
-echo -e -n "${BLUE}[5]${NC} ${YELLOW} Combining all subdomains in subdomains.txt${NC}"
+echo -e -n "${BLUE}[5]${NC} ${YELLOW} Combining all subdomains in subdomains.txt.${NC}"
 cat sublist3r.tmp.txt subfinder.tmp.txt  puredns.tmp.txt crtsh.tmp.txt| sort | uniq > subdomains.txt
 echo
-echo -e "${PURPLE}[+]${NC}${YELLOW} Found subdomains are saved in subdomains.txt.${NC}"
+echo -e "${PURPLE}[+]${NC} ${YELLOW} Found subdomains are saved in subdomains.txt.${NC}"
 # Step 6: Perform port scanning with naabu
 echo
-echo -e "${BLUE}[6]${NC} ${YELLOW} Scanning ports on each subdomain using naabu${NC}"
+echo -e "${BLUE}[6]${NC} ${YELLOW} Scanning ports on each subdomain using naabu.${NC}"
 echo
 naabu -silent -c 50 -l subdomains.txt -p 1-65535 > subdomain-port.tmp.txt
 
