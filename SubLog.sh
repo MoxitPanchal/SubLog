@@ -1,5 +1,4 @@
 #!/bin/bash
-clear
 echo ""
 echo  -e "[38;2;121;240;21m [39m[38;2;125;239;19m [39m[38;2;130;236;16m█[39m[38;2;134;234;14m█[39m[38;2;138;232;13m█[39m[38;2;142;229;11m█[39m[38;2;147;227;9m█[39m[38;2;151;224;8m█[39m[38;2;155;221;6m█[39m[38;2;159;218;5m█[39m[38;2;163;215;4m [39m[38;2;167;212;3m [39m[38;2;171;209;2m [39m[38;2;175;206;2m [39m[38;2;179;202;1m [39m[38;2;183;199;1m [39m[38;2;187;195;1m [39m[38;2;190;192;1m [39m[38;2;194;188;1m [39m[38;2;197;184;1m█[39m[38;2;201;180;1m█[39m[38;2;204;177;2m [39m[38;2;208;173;2m [39m[38;2;211;169;3m [39m[38;2;214;165;4m [39m[38;2;217;161;5m [39m[38;2;220;156;6m [39m[38;2;223;152;7m█[39m[38;2;226;148;9m█[39m[38;2;228;144;10m [39m[38;2;231;140;12m [39m[38;2;233;136;14m [39m[38;2;236;131;16m [39m[38;2;238;127;18m [39m[38;2;240;123;20m [39m[38;2;242;119;22m [39m[38;2;243;114;25m [39m[38;2;245;110;27m [39m[38;2;247;106;30m [39m[38;2;248;102;33m [39m[38;2;249;98;35m [39m[38;2;250;94;38m [39m[38;2;251;90;41m [39m[38;2;252;86;45m [39m[38;2;253;82;48m [39m[38;2;254;78;51m [39m[38;2;254;74;55m [39m[38;2;254;70;58m [39m[38;2;254;66;62m [39m[38;2;254;63;65m [39m[38;2;254;59;69m [39m[38;2;254;55;73m [39m[38;2;254;52;77m[39m
 [38;2;134;234;14m [39m[38;2;138;232;13m█[39m[38;2;142;229;11m█[39m[38;2;147;227;9m░[39m[38;2;151;224;8m░[39m[38;2;155;221;6m░[39m[38;2;159;218;5m░[39m[38;2;163;215;4m░[39m[38;2;167;212;3m░[39m[38;2;171;209;2m [39m[38;2;175;206;2m [39m[38;2;179;202;1m [39m[38;2;183;199;1m [39m[38;2;187;195;1m [39m[38;2;190;192;1m [39m[38;2;194;188;1m [39m[38;2;197;184;1m [39m[38;2;201;180;1m [39m[38;2;204;177;2m░[39m[38;2;208;173;2m█[39m[38;2;211;169;3m█[39m[38;2;214;165;4m [39m[38;2;217;161;5m [39m[38;2;220;156;6m [39m[38;2;223;152;7m [39m[38;2;226;148;9m [39m[38;2;228;144;10m░[39m[38;2;231;140;12m█[39m[38;2;233;136;14m█[39m[38;2;236;131;16m [39m[38;2;238;127;18m [39m[38;2;240;123;20m [39m[38;2;242;119;22m [39m[38;2;243;114;25m [39m[38;2;245;110;27m [39m[38;2;247;106;30m [39m[38;2;248;102;33m [39m[38;2;249;98;35m [39m[38;2;250;94;38m [39m[38;2;251;90;41m [39m[38;2;252;86;45m [39m[38;2;253;82;48m [39m[38;2;254;78;51m [39m[38;2;254;74;55m [39m[38;2;254;70;58m [39m[38;2;254;66;62m [39m[38;2;254;63;65m█[39m[38;2;254;59;69m█[39m[38;2;254;55;73m█[39m[38;2;254;52;77m█[39m[38;2;253;49;81m█[39m[38;2;252;45;85m [39m[38;2;252;42;89m[39m
@@ -24,25 +23,6 @@ usage() {
     echo "Usage: $0 [-w wordlist_file] <domain>"
     exit 1
 }
-
-# Ask for folder name
-echo -n -e "${YELLOW}Enter the folder name to save the text files: ${NC}" 
-read folder_name
-
-# Check if folder name is provided
-if [ -z "$folder_name" ]; then
-    echo -e "${RED}Error: Folder name cannot be empty.${NC}"
-    exit 1
-fi
-
-# Check if folder exists, if not create it
-if [ ! -d "$folder_name" ]; then
-    mkdir "$folder_name"
-fi
-
-# Change to the folder directory
-cd "$folder_name" || exit 1
-
 # Check if at least domain is provided as an argument
 if [ $# -lt 1 ]; then
     usage
@@ -65,18 +45,38 @@ while getopts ":w:" opt; do
     esac
 done
 shift $((OPTIND -1))
-
+if [ -n "$wordlist" ]; then
+    # Check if the specified wordlist exists
+    if [ ! -f "$wordlist" ]; then
+        echo "Error: Wordlist '$wordlist' not found."
+        exit 1
+    fi
+fi
 # Check if domain is provided
 if [ $# -ne 1 ]; then
     usage
 fi
 
 domain="$1"
+# Ask for folder name
+echo -n -e "${YELLOW}Enter the folder name to save the text files: ${NC}" 
+read folder_name
 
-# Default wordlist if not provided
-if [ -z "$wordlist" ]; then
-    wordlist="../default_wordlist.txt"
+# Check if folder name is provided
+if [ -z "$folder_name" ]; then
+    echo -e "${RED}Error: Folder name cannot be empty.${NC}"
+    exit 1
 fi
+
+# Check if folder exists, if not create it
+if [ ! -d "$folder_name" ]; then
+    mkdir "$folder_name"
+fi
+
+# Change to the folder directory
+cd "$folder_name" || exit 1
+
+
 
 # Step 1: Find subdomains using sublist3r
 echo
@@ -93,23 +93,50 @@ subfinder  -silent  -d $domain > subfinder.tmp.txt
 echo
 echo -e  "${BLUE}[3]${NC} ${YELLOW}Subdomain bruteforce using puredns.${NC}"
 echo -e "${RED}NOTE: ${NC}This might take some time (30-35 mins)."
-# Define the folder containing the lists
-folder="../subdomain-wordlists"
-counter=0
-# Iterate over each file in the folder
-for list in "$folder"/*; do
-    # Check if the file exists and is a regular file
-    if [ -f "$list" ]; then
-        counter=$((counter + 1))
-        # Run PureDNS command with the current file
-         puredns -q bruteforce --rate-limit-trusted 0 --resolvers-trusted ../resolv.txt $list --trusted-only $domain > puredns-file-${counter}.txt
-        # Print message indicating completion
-        echo
-        echo -e "${YELLOW}[+]${NC} ${GREEN}Subdomain bruteforce wordlist ${counter} completed. 🗸${NC}"
-        echo
-        sleep 10
-    fi
-done
+# Check if the custom wordlist file exists
+if [ -f "$wordlist" ]; then
+
+    # Create a directory to store the divided wordlists
+    mkdir -p divided_wordlists
+    
+    # Split the custom wordlist into 10 parts
+    split -n 10 "$wordlist" divided_wordlists/part-
+     counter=0
+     folder="divided_wordlists"
+     for list in "$folder"/*; do
+        if [ -f "$list" ]; then
+          counter=$((counter + 1))
+          # Run PureDNS command with the current divided wordlist
+          puredns -q bruteforce --rate-limit-trusted 0 --resolvers-trusted ../resolv.txt "$list" --trusted-only "$domain" > "puredns-file-${counter}.txt"
+          # Print message indicating completion
+          echo
+          echo -e "${YELLOW}[+]${NC} ${GREEN}Subdomain bruteforce with divided wordlist $list completed. 🗸${NC}"
+          echo
+          sleep 10
+        fi
+    done
+
+    # Remove the divided wordlists
+    rm -rf divided_wordlists
+else
+    # Iterate over each file in the folder
+    counter=0
+    folder="../subdomain-wordlists"
+    for list in "$folder"/*; do
+        # Check if the file exists and is a regular file
+        if [ -f "$list" ]; then
+            counter=$((counter + 1))
+            # Run PureDNS command with the current file
+            puredns -q bruteforce --rate-limit-trusted 0 --resolvers-trusted ../resolv.txt "$list" --trusted-only "$domain" > "puredns-file-${counter}.txt"
+            # Print message indicating completion
+            echo
+            echo -e "${YELLOW}[+]${NC} ${GREEN}Subdomain bruteforce wordlist ${counter} completed. 🗸${NC}"
+            echo
+            sleep 10
+        fi
+    done
+fi
+
 cat puredns-file-* | sort | uniq > puredns.tmp.txt
 rm puredns-file-*
 
@@ -123,7 +150,7 @@ curl -s "https://crt.sh/?q=%.$domain&output=json" | jq -r '.[].name_value' | sed
 echo -e -n "${BLUE}[5]${NC} ${YELLOW} Combining all subdomains in subdomains.txt${NC}"
 cat sublist3r.tmp.txt subfinder.tmp.txt  puredns.tmp.txt crtsh.tmp.txt| sort | uniq > subdomains.txt
 echo
-echo -e "${YELLOW}Found subdomains are saved in subdomains.txt.${NC}"
+echo -e "${PURPLE}[+]${NC} ${YELLOW} Found subdomains are saved in subdomains.txt.${NC}"
 # Step 6: Perform port scanning with naabu
 echo
 echo -e "${BLUE}[6]${NC} ${YELLOW} Scanning ports on each subdomain using naabu${NC}"
