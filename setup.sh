@@ -19,7 +19,7 @@ if ! command -v go &> /dev/null; then
     sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.22.1.linux-amd64.tar.gz
     export PATH=$PATH:/usr/local/go/bin
     sudo rm -rf go1.22.1.linux-amd64.tar.gz
-    
+        
     # Verify installation
     if ! command -v go &> /dev/null; then
         echo "Error: Go installation failed."
@@ -54,3 +54,13 @@ sudo cp -r /root/go $HOME/
 export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
 echo "export PATH=$PATH" >> ~/.zshrc
 echo "export PATH=$PATH" >> ~/.bashrc
+if ! command -v puredns &> /dev/null; then
+    echo "Error installing puredns!"
+else
+    echo "Puredns installed successfully"
+fi
+if ! command -v naabu &> /dev/null; then
+    echo "Error installing puredns!"
+else
+    echo "Puredns installed successfully"    
+fi
