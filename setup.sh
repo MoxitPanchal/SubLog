@@ -60,7 +60,7 @@ else
     echo "Puredns installed successfully"
 fi
 if ! command -v naabu &> /dev/null; then
-    echo "Error installing puredns!"
+    echo "Error installing naabu!"
 else
     echo "Puredns installed successfully"    
 fi
