@@ -1,7 +1,7 @@
 #!/bin/bash
 sudo zsh <<EOF
 sudo apt-get update
-sudo apt-get install libpcap-dev libpcap0.8 libpcap0.8-dev -y
+sudo apt-get install libpcap-dev libpcap0.8 libpcap0.8-dev jq sed -y
 
 # Install sublist3r
 sudo apt-get install sublist3r -y
@@ -45,15 +45,15 @@ sudo rm -rf massdns
 # Install puredns
 go install github.com/d3mondev/puredns/v2@latest
 export PATH=$PATH:$HOME/go/bin
-echo "export PATH=$PATH" >> ~/.zshrc
-echo "export PATH=$PATH" >> ~/.bashrc
+echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.zshrc
+echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.bashrc
 
 EOF
 sleep 10
 sudo cp -r /root/go $HOME/
 export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin
-echo "export PATH=$PATH" >> ~/.zshrc
-echo "export PATH=$PATH" >> ~/.bashrc
+echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.zshrc
+echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.bashrc
 if ! command -v puredns &> /dev/null; then
     echo "Error installing puredns!"
 else
