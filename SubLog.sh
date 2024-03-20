@@ -1,4 +1,5 @@
 #!/bin/bash
+
 echo ""
 echo  -e "[38;2;121;240;21m [39m[38;2;125;239;19m [39m[38;2;130;236;16m█[39m[38;2;134;234;14m█[39m[38;2;138;232;13m█[39m[38;2;142;229;11m█[39m[38;2;147;227;9m█[39m[38;2;151;224;8m█[39m[38;2;155;221;6m█[39m[38;2;159;218;5m█[39m[38;2;163;215;4m [39m[38;2;167;212;3m [39m[38;2;171;209;2m [39m[38;2;175;206;2m [39m[38;2;179;202;1m [39m[38;2;183;199;1m [39m[38;2;187;195;1m [39m[38;2;190;192;1m [39m[38;2;194;188;1m [39m[38;2;197;184;1m█[39m[38;2;201;180;1m█[39m[38;2;204;177;2m [39m[38;2;208;173;2m [39m[38;2;211;169;3m [39m[38;2;214;165;4m [39m[38;2;217;161;5m [39m[38;2;220;156;6m [39m[38;2;223;152;7m█[39m[38;2;226;148;9m█[39m[38;2;228;144;10m [39m[38;2;231;140;12m [39m[38;2;233;136;14m [39m[38;2;236;131;16m [39m[38;2;238;127;18m [39m[38;2;240;123;20m [39m[38;2;242;119;22m [39m[38;2;243;114;25m [39m[38;2;245;110;27m [39m[38;2;247;106;30m [39m[38;2;248;102;33m [39m[38;2;249;98;35m [39m[38;2;250;94;38m [39m[38;2;251;90;41m [39m[38;2;252;86;45m [39m[38;2;253;82;48m [39m[38;2;254;78;51m [39m[38;2;254;74;55m [39m[38;2;254;70;58m [39m[38;2;254;66;62m [39m[38;2;254;63;65m [39m[38;2;254;59;69m [39m[38;2;254;55;73m [39m[38;2;254;52;77m[39m
 [38;2;134;234;14m [39m[38;2;138;232;13m█[39m[38;2;142;229;11m█[39m[38;2;147;227;9m░[39m[38;2;151;224;8m░[39m[38;2;155;221;6m░[39m[38;2;159;218;5m░[39m[38;2;163;215;4m░[39m[38;2;167;212;3m░[39m[38;2;171;209;2m [39m[38;2;175;206;2m [39m[38;2;179;202;1m [39m[38;2;183;199;1m [39m[38;2;187;195;1m [39m[38;2;190;192;1m [39m[38;2;194;188;1m [39m[38;2;197;184;1m [39m[38;2;201;180;1m [39m[38;2;204;177;2m░[39m[38;2;208;173;2m█[39m[38;2;211;169;3m█[39m[38;2;214;165;4m [39m[38;2;217;161;5m [39m[38;2;220;156;6m [39m[38;2;223;152;7m [39m[38;2;226;148;9m [39m[38;2;228;144;10m░[39m[38;2;231;140;12m█[39m[38;2;233;136;14m█[39m[38;2;236;131;16m [39m[38;2;238;127;18m [39m[38;2;240;123;20m [39m[38;2;242;119;22m [39m[38;2;243;114;25m [39m[38;2;245;110;27m [39m[38;2;247;106;30m [39m[38;2;248;102;33m [39m[38;2;249;98;35m [39m[38;2;250;94;38m [39m[38;2;251;90;41m [39m[38;2;252;86;45m [39m[38;2;253;82;48m [39m[38;2;254;78;51m [39m[38;2;254;74;55m [39m[38;2;254;70;58m [39m[38;2;254;66;62m [39m[38;2;254;63;65m█[39m[38;2;254;59;69m█[39m[38;2;254;55;73m█[39m[38;2;254;52;77m█[39m[38;2;253;49;81m█[39m[38;2;252;45;85m [39m[38;2;252;42;89m[39m
@@ -70,7 +71,7 @@ fi
 
 # Check if folder exists, if not create it
 if [ ! -d "$folder_name" ]; then
-    mkdir "$folder_name"
+    sudo mkdir "$folder_name"
 fi
 
 # Change to the folder directory
@@ -80,34 +81,40 @@ cd "$folder_name" || exit 1
 
 # Step 1: Find subdomains using sublist3r
 echo
-echo -e  "${BLUE}[1]${NC} ${YELLOW}Finding subdomains with sublist3r.${NC}"
-python -c "import sublist3r;subdomains = sublist3r.main('$domain', 50, 'sublist3r.tmp.txt' ,ports= None, silent=True, verbose= False, enable_bruteforce= False, engines=None)"
+echo -e "${BLUE}[1]${NC} ${YELLOW}Finding subdomains with sublist3r.${NC}"
+sudo python -c "import sublist3r;subdomains = sublist3r.main('$domain', 50, 'sublist3r.tmp.txt' ,ports= None, silent=True, verbose= False, enable_bruteforce= False, engines=None)"
 
 # Step 2: Find subdomains using subfinder
 echo
 echo -e -n "${BLUE}[2]${NC} ${YELLOW}Finding subdomains with subfinder.${NC}"
 echo
+sudo zsh <<EOF 
 subfinder  -silent  -d $domain > subfinder.tmp.txt
+EOF
 
 # Step 3: Perform subdomain brute-force with puredns
 echo
-echo -e  "${BLUE}[3]${NC} ${YELLOW}Subdomain bruteforce using puredns.${NC}"
+echo -e "${BLUE}[3]${NC} ${YELLOW}Subdomain bruteforce using puredns.${NC}"
 echo -e "${RED}NOTE: ${NC}This might take some time (30-35 mins)."
 # Check if the custom wordlist file exists
 if [ -f "$wordlist" ]; then
 
     # Create a directory to store the divided wordlists
-    mkdir -p divided_wordlists
+    sudo mkdir -p divided_wordlists
     
     # Split the custom wordlist into 10 parts
-    split -n 10 "$wordlist" divided_wordlists/part-
+    sudo split -n 10 "$wordlist" divided_wordlists/part-
      counter=0
      folder="divided_wordlists"
      for list in "$folder"/*; do
         if [ -f "$list" ]; then
           counter=$((counter + 1))
           # Run PureDNS command with the current divided wordlist
+sudo su <<EOF
           puredns -q bruteforce --rate-limit-trusted 0 --resolvers-trusted ../resolv.txt "$list" --trusted-only "$domain" > "puredns-file-${counter}.txt"
+     	  echo "I am from root with $(whoami)"
+EOF
+     	  echo "Now I am from kali with $USER"
           # Print message indicating completion
           echo
           echo -e "${YELLOW}[+]${NC} ${GREEN}Subdomain bruteforce with divided wordlist $list completed. 🗸${NC}"
@@ -117,7 +124,7 @@ if [ -f "$wordlist" ]; then
     done
 
     # Remove the divided wordlists
-    rm -rf divided_wordlists
+    sudo rm -rf divided_wordlists
 else
     # Iterate over each file in the folder
     counter=0
@@ -127,8 +134,12 @@ else
         if [ -f "$list" ]; then
             counter=$((counter + 1))
             # Run PureDNS command with the current file
+sudo su <<EOF
             puredns -q bruteforce --rate-limit-trusted 0 --resolvers-trusted ../resolv.txt "$list" --trusted-only "$domain" > "puredns-file-${counter}.txt"
-            # Print message indicating completion
+            echo "I am from root and $USER"
+EOF
+            # Print message indicating completion     
+            echo "I am from kali and $USER"   
             echo
             echo -e "${YELLOW}[+]${NC} ${GREEN}Subdomain bruteforce wordlist ${counter} completed. 🗸${NC}"
             echo
@@ -137,29 +148,31 @@ else
     done
 fi
 
-cat puredns-file-* | sort | uniq > puredns.tmp.txt
-rm puredns-file-*
+sudo cat puredns-file-* | sort | uniq > puredns.tmp.txt
+sudo rm -rf puredns-file-*
 
 # Step 4: Find subdomains using crt.sh
 echo
 echo -e "${BLUE}[4]${NC} ${YELLOW} Extracting subdomains from crt.sh.${NC}"
 echo
-curl -s "https://crt.sh/?q=%.$domain&output=json" | jq -r '.[].name_value' | sed 's/\*\.//g' | sort -u  >  crtsh.tmp.txt
+sudo curl -s "https://crt.sh/?q=%.$domain&output=json" | jq -r '.[].name_value' | sed 's/\*\.//g' | sort -u  >  crtsh.tmp.txt
 
 # Step 5: Make a list of all unique subdomains from the temporary files
-echo -e -n "${BLUE}[5]${NC} ${YELLOW} Combining all subdomains in subdomains.txt.${NC}"
-cat sublist3r.tmp.txt subfinder.tmp.txt  puredns.tmp.txt crtsh.tmp.txt| sort | uniq > subdomains.txt
+echo -e "${BLUE}[5]${NC} ${YELLOW} Combining all subdomains in subdomains.txt.${NC}"
+sudo cat sublist3r.tmp.txt subfinder.tmp.txt  puredns.tmp.txt crtsh.tmp.txt| sort | uniq > subdomains.txt
 echo
 echo -e "${PURPLE}[+]${NC} ${YELLOW} Found subdomains are saved in subdomains.txt.${NC}"
 # Step 6: Perform port scanning with naabu
 echo
 echo -e "${BLUE}[6]${NC} ${YELLOW} Scanning ports on each subdomain using naabu.${NC}"
 echo
+sudo zsh <<EOF
 naabu -silent -c 50 -l subdomains.txt -p 1-65535 > subdomain-port.tmp.txt
-
+EOF
 # Step 7: Check accessibility of subdomains using curl
 echo -e "${BLUE}[7]${NC} ${YELLOW} Checking accessibilty of found subdomains with curl.${NC}"
 echo
+sudo zsh <<EOF
 # Define input file containing subdomains and ports
 INPUT_FILE="subdomain-port.tmp.txt"
 
@@ -238,7 +251,7 @@ while IFS= read -r http_subdomain; do
 done < "$HTTP_OUTPUT_FILE"
 
 # Remove redirected URLs from the final HTTP list
-awk 'NR==FNR{a[$0];next} !($0 in a)' <(printf '%s\n' "${redirected_urls[@]}") "$HTTP_OUTPUT_FILE" > "$FINAL_HTTP_OUTPUT_FILE"
+sudo awk 'NR==FNR{a[$0];next} !($0 in a)' <(printf '%s\n' "${redirected_urls[@]}") "$HTTP_OUTPUT_FILE" > "$FINAL_HTTP_OUTPUT_FILE"
 echo
 echo -e "${PURPLE}Final HTTP accessible subdomains saved to '$FINAL_HTTP_OUTPUT_FILE'"
 echo -e
@@ -246,5 +259,6 @@ echo -e "HTTPS accessible subdomains saved to '$HTTPS_OUTPUT_FILE'${NC}"
 rm http_accessible.txt
 #Step 9: Combine all accessible subdomains
 cat final_http_accessible.txt https_accessible.txt | sort | uniq > $domain-subdomains.txt
+EOF
 echo
 echo -e "${YELLOW}Subdomain enumeration completed. Results saved in $domain-subdomains.txt${NC}"
