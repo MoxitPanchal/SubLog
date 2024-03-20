@@ -47,7 +47,6 @@ go install github.com/d3mondev/puredns/v2@latest
 export PATH=$PATH:$HOME/go/bin
 echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.zshrc
 echo "export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin" >> ~/.bashrc
-
 EOF
 sleep 10
 sudo cp -r /root/go $HOME/
