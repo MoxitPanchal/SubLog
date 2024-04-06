@@ -44,7 +44,7 @@ sudo rm -rf massdns
 
 # Install puredns
 go install github.com/d3mondev/puredns/v2@latest
-export PATH=$PATH:$~/go/bin
+export PATH=$PATH:~/go/bin
 echo "export PATH=$PATH:/usr/local/go/bin:~/go/bin" >> ~/.zshrc
 echo "export PATH=$PATH:/usr/local/go/bin:~/go/bin" >> ~/.bashrc
 EOF
@@ -53,6 +53,7 @@ sudo cp -r /root/go $HOME/
 export PATH=$PATH:/usr/local/go/bin:~/go/bin
 echo "export PATH=$PATH:/usr/local/go/bin:~/go/bin" >> ~/.zshrc
 echo "export PATH=$PATH:/usr/local/go/bin:~/go/bin" >> ~/.bashrc
+source ~/.zshrc
 if ! command -v puredns &> /dev/null; then
     echo "Error installing puredns!"
 else
@@ -61,5 +62,5 @@ fi
 if ! command -v naabu &> /dev/null; then
     echo "Error installing naabu!"
 else
-    echo "Puredns installed successfully"    
+    echo "Naabu installed successfully"    
 fi
