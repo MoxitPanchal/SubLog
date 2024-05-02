@@ -76,18 +76,16 @@ fi
 # Change to the folder directory
 cd "$folder_name" || exit 1
 
-
-
 # Step 1: Find subdomains using sublist3r
 echo
 echo -e  "${BLUE}[1]${NC} ${YELLOW}Finding subdomains with sublist3r.${NC}"
-python -c "import sublist3r;subdomains = sublist3r.main('$domain', 50, 'sublist3r.tmp.txt' ,ports= None, silent=True, verbose= False, enable_bruteforce= False, engines=None)"
+sudo python -c "import sublist3r;subdomains = sublist3r.main('$domain', 50, 'sublist3r.tmp.txt' ,ports= None, silent=True, verbose= False, enable_bruteforce= False, engines=None)"
 
 # Step 2: Find subdomains using subfinder
 echo
 echo -e -n "${BLUE}[2]${NC} ${YELLOW}Finding subdomains with subfinder.${NC}"
 echo
-subfinder  -silent  -d $domain > subfinder.tmp.txt
+sudo subfinder  -silent  -d $domain > subfinder.tmp.txt
 
 # Step 3: Perform subdomain brute-force with puredns
 echo
@@ -107,7 +105,7 @@ if [ -f "$wordlist" ]; then
         if [ -f "$list" ]; then
           counter=$((counter + 1))
           # Run PureDNS command with the current divided wordlist
-          puredns -q bruteforce --rate-limit-trusted 0 --resolvers-trusted ../resolv.txt "$list" --trusted-only "$domain" > "puredns-file-${counter}.txt"
+          sudo puredns -q bruteforce --rate-limit-trusted 0 --resolvers-trusted ../resolv.txt "$list" --trusted-only "$domain" > "puredns-file-${counter}.txt"
           # Print message indicating completion
           echo
           echo -e "${YELLOW}[+]${NC} ${GREEN}Subdomain bruteforce with divided wordlist $list completed. 🗸${NC}"

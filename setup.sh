@@ -60,3 +60,4 @@ if ! command -v puredns &> /dev/null; then
 else
     echo "Puredns is already installed."
 fi
+additional_path="~/go/bin"
