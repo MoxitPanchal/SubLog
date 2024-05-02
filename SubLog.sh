@@ -85,7 +85,7 @@ sudo python -c "import sublist3r;subdomains = sublist3r.main('$domain', 50, 'sub
 echo
 echo -e -n "${BLUE}[2]${NC} ${YELLOW}Finding subdomains with subfinder.${NC}"
 echo
-sudo subfinder  -silent  -d $domain > subfinder.tmp.txt
+sudo subfinder  -silent  -d $domain | sudo tee subfinder.tmp.txt > /dev/null
 
 # Step 3: Perform subdomain brute-force with puredns
 echo
@@ -98,14 +98,14 @@ if [ -f "$wordlist" ]; then
     sudo mkdir -p divided_wordlists
     
     # Split the custom wordlist into 10 parts
-    split -n 10 "$wordlist" divided_wordlists/part-
+    sudo split -n 10 "$wordlist" divided_wordlists/part-
      counter=0
      folder="divided_wordlists"
      for list in "$folder"/*; do
         if [ -f "$list" ]; then
           counter=$((counter + 1))
           # Run PureDNS command with the current divided wordlist
-          sudo puredns -q bruteforce --rate-limit-trusted 0 --resolvers-trusted ../resolv.txt "$list" --trusted-only "$domain" > "puredns-file-${counter}.txt"
+          puredns -q bruteforce --rate-limit-trusted 0 --resolvers-trusted ../resolv.txt "$list" --trusted-only "$domain" | sudo tee "puredns-file-${counter}.txt"
           # Print message indicating completion
           echo
           echo -e "${YELLOW}[+]${NC} ${GREEN}Subdomain bruteforce with divided wordlist $list completed. 🗸${NC}"
@@ -125,7 +125,7 @@ else
         if [ -f "$list" ]; then
             counter=$((counter + 1))
             # Run PureDNS command with the current file
-            puredns -q bruteforce --rate-limit-trusted 0 --resolvers-trusted ../resolv.txt "$list" --trusted-only "$domain" > "puredns-file-${counter}.txt"
+            puredns -q bruteforce --rate-limit-trusted 0 --resolvers-trusted ../resolv.txt "$list" --trusted-only "$domain" | sudo tee "puredns-file-${counter}.txt"
             # Print message indicating completion
             echo
             echo -e "${YELLOW}[+]${NC} ${GREEN}Subdomain bruteforce wordlist ${counter} completed. 🗸${NC}"
@@ -135,25 +135,25 @@ else
     done
 fi
 
-cat puredns-file-* | sort | uniq > puredns.tmp.txt
-rm puredns-file-*
+cat puredns-file-* | sort | uniq | sudo tee puredns.tmp.txt > /dev/null
+sudo rm -f puredns-file-*
 
 # Step 4: Find subdomains using crt.sh
 echo
 echo -e "${BLUE}[4]${NC} ${YELLOW} Extracting subdomains from crt.sh.${NC}"
 echo
-curl -s "https://crt.sh/?q=%.$domain&output=json" | jq -r '.[].name_value' | sed 's/\*\.//g' | sort -u  >  crtsh.tmp.txt
+curl -s "https://crt.sh/?q=%.$domain&output=json" | jq -r '.[].name_value' | sed 's/\*\.//g' | sort -u  | sudo tee crtsh.tmp.txt > /dev/null
 
 # Step 5: Make a list of all unique subdomains from the temporary files
 echo -e -n "${BLUE}[5]${NC} ${YELLOW} Combining all subdomains in subdomains.txt${NC}"
-cat sublist3r.tmp.txt subfinder.tmp.txt  puredns.tmp.txt crtsh.tmp.txt| sort | uniq > subdomains.txt
+cat sublist3r.tmp.txt subfinder.tmp.txt  puredns.tmp.txt crtsh.tmp.txt| sort | uniq |sudo tee subdomains.txt > /dev/null
 echo
 echo -e "${PURPLE}[+]${NC} ${YELLOW} Found subdomains are saved in subdomains.txt.${NC}"
 # Step 6: Perform port scanning with naabu
 echo
 echo -e "${BLUE}[6]${NC} ${YELLOW} Scanning ports on each subdomain using naabu${NC}"
 echo
-naabu -silent -c 50 -l subdomains.txt -p 1-65535 > subdomain-port.tmp.txt
+naabu -silent -c 50 -l subdomains.txt -p 1-65535 | sudo tee subdomain-port.tmp.txt > /dev/null
 
 # Step 7: Check accessibility of subdomains using curl
 echo -e "${BLUE}[7]${NC} ${YELLOW} Checking accessibilty of found subdomains with curl.${NC}"
@@ -178,7 +178,7 @@ while IFS= read -r subdomainwithport; do
     # Check HTTP accessibility
     response_code=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 10 --max-time 20 "http://$subdomainwithport")
     if [[ $response_code == 2* || $response_code == 3* ]]; then
-        echo "$subdomainwithport" >> "$HTTP_OUTPUT_FILE"
+        sudo sh -c 'echo "$subdomainwithport" >> "$HTTP_OUTPUT_FILE"'
         echo -e "${GREEN}HTTP access successful${NC}"
     else
         echo -e "${RED}HTTP access failed${NC}"
@@ -187,7 +187,7 @@ while IFS= read -r subdomainwithport; do
     # Check HTTPS accessibility
     response_code=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 10 --max-time 20 "https://$subdomainwithport")
     if [[ $response_code == 2* || $response_code == 3* ]]; then
-        echo "$subdomainwithport" >> "$HTTPS_OUTPUT_FILE"
+        sudo sh -c 'echo "$subdomainwithport" >> "$HTTPS_OUTPUT_FILE"'
         echo -e "${GREEN}HTTPS access successful${NC}"
     else
         echo -e "${RED}HTTPS access failed${NC}"
@@ -196,17 +196,17 @@ while IFS= read -r subdomainwithport; do
     echo "------------------------------------------"
 done < "$INPUT_FILE"
 # Add 'http://' at the start of each line in HTTP accessible file
-sed -i 's/^/http:\/\//' "$HTTP_OUTPUT_FILE"
+sudo sed -i 's/^/http:\/\//' "$HTTP_OUTPUT_FILE"
 
 # Add 'https://' at the start of each line in HTTPS accessible file
-sed -i 's/^/https:\/\//' "$HTTPS_OUTPUT_FILE"
+sudo sed -i 's/^/https:\/\//' "$HTTPS_OUTPUT_FILE"
 echo
 echo -e "${YELLOW}HTTP accessible subdomains saved to '$HTTP_OUTPUT_FILE'"
 echo -e
 echo -e "HTTPS accessible subdomains saved to '$HTTPS_OUTPUT_FILE'${NC}"
 
 # Cleanup temporary files
-rm sublist3r.tmp.txt subfinder.tmp.txt puredns.tmp.txt crtsh.tmp.txt subdomain-port.tmp.txt
+sudo rm -f sublist3r.tmp.txt subfinder.tmp.txt puredns.tmp.txt crtsh.tmp.txt subdomain-port.tmp.txt
 
 # Step 8: Check if HTTP accessible subdomains redirect to HTTPS
 # Define output file for final HTTP accessible subdomains
@@ -236,13 +236,13 @@ while IFS= read -r http_subdomain; do
 done < "$HTTP_OUTPUT_FILE"
 
 # Remove redirected URLs from the final HTTP list
-awk 'NR==FNR{a[$0];next} !($0 in a)' <(printf '%s\n' "${redirected_urls[@]}") "$HTTP_OUTPUT_FILE" > "$FINAL_HTTP_OUTPUT_FILE"
+sudo sh -c 'awk 'NR==FNR{a[$0];next} !($0 in a)' <(printf '%s\n' "${redirected_urls[@]}") "$HTTP_OUTPUT_FILE" > "$FINAL_HTTP_OUTPUT_FILE"'
 echo
 echo -e "${PURPLE}Final HTTP accessible subdomains saved to '$FINAL_HTTP_OUTPUT_FILE'"
 echo -e
 echo -e "HTTPS accessible subdomains saved to '$HTTPS_OUTPUT_FILE'${NC}"
-rm http_accessible.txt
+sudo rm -f http_accessible.txt
 #Step 9: Combine all accessible subdomains
-cat final_http_accessible.txt https_accessible.txt | sort | uniq > $domain-subdomains.txt
+cat final_http_accessible.txt https_accessible.txt | sort | uniq | sudo tee $domain-subdomains.txt > /dev/null
 echo
 echo -e "${YELLOW}Subdomain enumeration completed. Results saved in $domain-subdomains.txt${NC}"
