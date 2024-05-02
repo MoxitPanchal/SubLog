@@ -90,7 +90,7 @@ echo
 # Step 3: Perform subdomain brute-force with puredns
 echo -e  "${BLUE}[3]${NC} ${YELLOW}Subdomain bruteforce using puredns.${NC}"
 brute=false
-echo -n -e "${PURPLE}[+]${NC}${CYA}Do you want to Bruteforce?${NC} ${RED}(It will take time)${NC} (y/N): " 
+echo -n -e "${PURPLE}[+]${NC} ${CYAN}Do you want to Bruteforce?${NC} ${RED}(It will take time)${NC} (y/N): " 
 read choice1
 if [ "$choice1" = "y" ] || [ "$choice1" = "Y" ]; then
     brute=true
@@ -141,10 +141,11 @@ if $brute; then
             fi
         done
     fi
+    cat puredns-file-* | sort | uniq | sudo tee puredns.tmp.txt > /dev/null
+    sudo rm -f puredns-file-*
 fi
 
-cat puredns-file-* | sort | uniq | sudo tee puredns.tmp.txt > /dev/null
-sudo rm -f puredns-file-*
+
 
 # Step 4: Find subdomains using crt.sh
 echo
@@ -154,22 +155,29 @@ curl -s "https://crt.sh/?q=%.$domain&output=json" | jq -r '.[].name_value' | sed
 
 # Step 5: Make a list of all unique subdomains from the temporary files
 echo -e -n "${BLUE}[5]${NC} ${YELLOW} Combining all subdomains in subdomains.txt${NC}"
-cat sublist3r.tmp.txt subfinder.tmp.txt  puredns.tmp.txt crtsh.tmp.txt| sort | uniq |sudo tee subdomains.txt > /dev/null
+
+if $brute; then
+    cat sublist3r.tmp.txt subfinder.tmp.txt  puredns.tmp.txt crtsh.tmp.txt| sort | uniq |sudo tee subdomains.txt > /dev/null
+else
+    cat sublist3r.tmp.txt subfinder.tmp.txt crtsh.tmp.txt| sort | uniq |sudo tee subdomains.txt > /dev/null
+fi
 echo
 echo -e "${PURPLE}[+]${NC} ${YELLOW} Found subdomains are saved in subdomains.txt.${NC}"
 # Step 6: Perform port scanning with naabu
 echo
 echo -e "${BLUE}[6]${NC} ${YELLOW} Scanning ports on each subdomain using naabu${NC}"
+
 execute_loop=false
-echo -n -e "${PURPLE}[+]${NC}${CYA}Do you want to scan ports on each subdomain?${NC} ${RED}(It will take time)${NC} (y/N): " 
+
+echo -n -e "${PURPLE}[+]${NC} ${CYAN}Do you want to scan ports on each subdomain?${NC} ${RED}(It will take time)${NC} (y/N): " 
 read choice2
 
-if [[ "$choice2" = "y"] || [ "$choice2" = "Y"]] ; then
+if [ "$choice2" = "y" ] || [ "$choice2" = "Y" ] ; then
     execute_loop=true
 fi
 
 if $execute_loop; then 
-    echo -e "${PURPLE}[+]${NC}${CYAN}Enter the ports or range of ports you want to scan separated by comma or dash.${NC}" 
+    echo -e "${PURPLE}[+]${NC} ${CYAN}Enter the ports or range of ports you want to scan separated by comma or dash.${NC}" 
     echo -n -e "${RED}Example. 80,443,8080... or 1-65535. Leave it blank if you want to scan for common ports only.${NC}: " 
     read ports
     echo
