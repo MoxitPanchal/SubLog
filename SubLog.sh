@@ -78,19 +78,19 @@ cd "$folder_name" || exit 1
 
 # Step 1: Find subdomains using sublist3r
 echo
-echo -e  "${BLUE}[1]${NC} ${YELLOW}Finding subdomains with sublist3r.${NC}"
+echo -e  "${BLUE}[1]${NC}  ${YELLOW}Finding subdomains with sublist3r.${NC}"
 sudo python -c "import sublist3r;subdomains = sublist3r.main('$domain', 50, 'sublist3r.tmp.txt' ,ports= None, silent=True, verbose= False, enable_bruteforce= False, engines=None)"
 
 # Step 2: Find subdomains using subfinder
 echo
-echo -e -n "${BLUE}[2]${NC} ${YELLOW}Finding subdomains with subfinder.${NC}"
+echo -e -n "${BLUE}[2]${NC}  ${YELLOW}Finding subdomains with subfinder.${NC}"
 echo
 sudo subfinder  -silent  -d $domain | sudo tee subfinder.tmp.txt > /dev/null
 echo
 # Step 3: Perform subdomain brute-force with puredns
-echo -e  "${BLUE}[3]${NC} ${YELLOW}Subdomain bruteforce using puredns.${NC}"
+echo -e  "${BLUE}[3]${NC}  ${YELLOW}Subdomain bruteforce using puredns.${NC}"
 brute=false
-echo -n -e "${PURPLE}[+]${NC} ${CYAN}Do you want to Bruteforce?${NC} ${RED}(It will take time)${NC} (y/N): " 
+echo -n -e "${PURPLE}[+]${NC}  ${CYAN}Do you want to Bruteforce?${NC} ${RED}(It will take time)${NC} (y/N): " 
 read choice1
 if [ "$choice1" = "y" ] || [ "$choice1" = "Y" ]; then
     brute=true
@@ -169,7 +169,7 @@ echo -e "${BLUE}[6]${NC} ${YELLOW} Scanning ports on each subdomain using naabu$
 
 execute_loop=false
 
-echo -n -e "${PURPLE}[+]${NC} ${CYAN}Do you want to scan ports on each subdomain?${NC} ${RED}(It will take time)${NC} (y/N): " 
+echo -n -e "${PURPLE}[+]${NC}  ${CYAN}Do you want to scan ports on each subdomain?${NC} ${RED}(It will take time)${NC} (y/N): " 
 read choice2
 
 if [ "$choice2" = "y" ] || [ "$choice2" = "Y" ] ; then
@@ -177,7 +177,7 @@ if [ "$choice2" = "y" ] || [ "$choice2" = "Y" ] ; then
 fi
 
 if $execute_loop; then 
-    echo -e "${PURPLE}[+]${NC} ${CYAN}Enter the ports or range of ports you want to scan separated by comma or dash.${NC}" 
+    echo -e "${PURPLE}[+]${NC}  ${CYAN}Enter the ports or range of ports you want to scan separated by comma or dash.${NC}" 
     echo -n -e "${RED}Example. 80,443,8080... or 1-65535. Leave it blank if you want to scan for common ports only.${NC}: " 
     read ports
     echo
@@ -222,7 +222,7 @@ while IFS= read -r subdomainwithport; do
     # Check HTTPS accessibility
     response_code=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 10 --max-time 20 "https://$subdomainwithport")
     if [[ $response_code == 2* || $response_code == 3* ]]; then
-        echo "$subdomainwithport" | sudo tee -a "$HTTPS_OUTPUT_FILE"
+        echo "$subdomainwithport" | sudo tee -a "$HTTPS_OUTPUT_FILE" > /dev/null
         echo -e "${GREEN}HTTPS access successful${NC}"
     else
         echo -e "${RED}HTTPS access failed${NC}"
@@ -236,8 +236,7 @@ sudo sed -i 's/^/http:\/\//' "$HTTP_OUTPUT_FILE"
 # Add 'https://' at the start of each line in HTTPS accessible file
 sudo sed -i 's/^/https:\/\//' "$HTTPS_OUTPUT_FILE"
 echo
-echo -e "${YELLOW}HTTP accessible subdomains saved to '$HTTP_OUTPUT_FILE'"
-echo -e
+echo -e "${PURPLE}HTTP accessible subdomains saved to '$HTTP_OUTPUT_FILE'"
 echo -e "HTTPS accessible subdomains saved to '$HTTPS_OUTPUT_FILE'${NC}"
 
 # Cleanup temporary files
@@ -264,7 +263,7 @@ while IFS= read -r http_subdomain; do
         echo -e "Redirected to: $redirected_to"
         redirected_urls+=("$http_subdomain")
     else
-        echo "${RED}No redirection to HTTPS found${NC}, keeping $http_subdomain"
+        echo -e "${RED}No redirection to HTTPS found${NC}, keeping $http_subdomain"
     fi
 
     echo "------------------------------------------------------------------------------------------------------------------------"
