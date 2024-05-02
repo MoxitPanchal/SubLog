@@ -156,7 +156,7 @@ execute_loop=false
 echo -e "${PURPLE}[+]${NC}${CYA}Do you want to scan ports on each subdomain?${NC} ${RED}(It will take time)${NC} (y/N): " 
 read choice
 
-if [[$choice =~ [Yy]]]; then
+if [$choice = y]; then
     execute_loop=true
 fi
 
