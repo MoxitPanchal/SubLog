@@ -153,14 +153,16 @@ echo -e "${PURPLE}[+]${NC} ${YELLOW} Found subdomains are saved in subdomains.tx
 echo
 echo -e "${BLUE}[6]${NC} ${YELLOW} Scanning ports on each subdomain using naabu${NC}"
 execute_loop=false
-read -p "${PURPLE}[+]${NC}${CYA}Do you want to scan ports on each subdomain?${NC} ${RED}(It will take time)${NC} (y/N): " choice
+echo -e "${PURPLE}[+]${NC}${CYA}Do you want to scan ports on each subdomain?${NC} ${RED}(It will take time)${NC} (y/N): " 
+read choice
 
 if [[$choice =~ [Yy]]]; then
     execute_loop=true
 fi
 
 if $execute_loop; then 
-    read -p "${PURPLE}[+]${NC}${CYAN}Enter the ports or range of ports you want to scan separated by comma or dash.${NC} ${RED}(Example. 80,443,8080... or 1-65535. Leave it blank if you want to scan for common ports only.)${NC}: " ports
+    echo -e "${PURPLE}[+]${NC}${CYAN}Enter the ports or range of ports you want to scan separated by comma or dash.${NC} ${RED}(Example. 80,443,8080... or 1-65535. Leave it blank if you want to scan for common ports only.)${NC}: " 
+    read ports
     echo
     if [-z"$ports"]; then
         naabu -silent -c 50 -l subdomains.txt | sudo tee subdomain-port.tmp.txt > /dev/null
