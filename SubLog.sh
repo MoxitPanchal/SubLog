@@ -88,51 +88,57 @@ echo
 sudo subfinder  -silent  -d $domain | sudo tee subfinder.tmp.txt > /dev/null
 
 # Step 3: Perform subdomain brute-force with puredns
-echo
-echo -e  "${BLUE}[3]${NC} ${YELLOW}Subdomain bruteforce using puredns.${NC}"
-echo -e "${RED}NOTE: ${NC}This might take some time (30-35 mins)."
-# Check if the custom wordlist file exists
-if [ -f "$wordlist" ]; then
+echo -n -e "${PURPLE}[+]${NC}${CYA}Do you want to Bruteforce?${NC} ${RED}(It will take time)${NC} (y/N): " 
+read choice1
+if [[ "$choice1" = "y"] || [ "$choice1" = "Y"]] ; then
+    echo
+    echo -e  "${BLUE}[3]${NC} ${YELLOW}Subdomain bruteforce using puredns.${NC}"
+    echo -e "${RED}NOTE: ${NC}This might take some time (30-35 mins)."
+    # Check if the custom wordlist file exists
+    if [ -f "$wordlist" ]; then
 
-    # Create a directory to store the divided wordlists
-    sudo mkdir -p divided_wordlists
-    
-    # Split the custom wordlist into 10 parts
-    sudo split -n 10 "$wordlist" divided_wordlists/part-
-     counter=0
-     folder="divided_wordlists"
-     for list in "$folder"/*; do
-        if [ -f "$list" ]; then
-          counter=$((counter + 1))
-          # Run PureDNS command with the current divided wordlist
-          puredns -q bruteforce --rate-limit-trusted 0 --resolvers-trusted ../resolv.txt "$list" --trusted-only "$domain" | sudo tee "puredns-file-${counter}.txt" > /dev/null
-          # Print message indicating completion
-          echo
-          echo -e "${YELLOW}[+]${NC} ${GREEN}Subdomain bruteforce with divided wordlist $list completed. 🗸${NC}"
-          echo
-          sleep 10
-        fi
-    done
-
-    # Remove the divided wordlists
-    sudo rm -rf divided_wordlists
-else
-    # Iterate over each file in the folder
-    counter=0
-    folder="../subdomain-wordlists"
-    for list in "$folder"/*; do
-        # Check if the file exists and is a regular file
-        if [ -f "$list" ]; then
+        # Create a directory to store the divided wordlists
+        sudo mkdir -p divided_wordlists
+        
+        # Split the custom wordlist into 10 parts
+        sudo split -n 10 "$wordlist" divided_wordlists/part-
+        counter=0
+        folder="divided_wordlists"
+        for list in "$folder"/*; do
+            if [ -f "$list" ]; then
             counter=$((counter + 1))
-            # Run PureDNS command with the current file
+            # Run PureDNS command with the current divided wordlist
             puredns -q bruteforce --rate-limit-trusted 0 --resolvers-trusted ../resolv.txt "$list" --trusted-only "$domain" | sudo tee "puredns-file-${counter}.txt" > /dev/null
             # Print message indicating completion
             echo
-            echo -e "${YELLOW}[+]${NC} ${GREEN}Subdomain bruteforce wordlist ${counter} completed. 🗸${NC}"
+            echo -e "${YELLOW}[+]${NC} ${GREEN}Subdomain bruteforce with divided wordlist $list completed. 🗸${NC}"
             echo
             sleep 10
-        fi
-    done
+            fi
+        done
+
+        # Remove the divided wordlists
+        sudo rm -rf divided_wordlists
+    else
+        # Iterate over each file in the folder
+        counter=0
+        folder="../subdomain-wordlists"
+        for list in "$folder"/*; do
+            # Check if the file exists and is a regular file
+            if [ -f "$list" ]; then
+                counter=$((counter + 1))
+                # Run PureDNS command with the current file
+                puredns -q bruteforce --rate-limit-trusted 0 --resolvers-trusted ../resolv.txt "$list" --trusted-only "$domain" | sudo tee "puredns-file-${counter}.txt" > /dev/null
+                # Print message indicating completion
+                echo
+                echo -e "${YELLOW}[+]${NC} ${GREEN}Subdomain bruteforce wordlist ${counter} completed. 🗸${NC}"
+                echo
+                sleep 10
+            fi
+        done
+    fi
+else
+    break
 fi
 
 cat puredns-file-* | sort | uniq | sudo tee puredns.tmp.txt > /dev/null
@@ -154,9 +160,9 @@ echo
 echo -e "${BLUE}[6]${NC} ${YELLOW} Scanning ports on each subdomain using naabu${NC}"
 execute_loop=false
 echo -n -e "${PURPLE}[+]${NC}${CYA}Do you want to scan ports on each subdomain?${NC} ${RED}(It will take time)${NC} (y/N): " 
-read choice
+read choice2
 
-if [ "$choice" = "y"] || [ "$choice" = "Y"] ; then
+if [[ "$choice2" = "y"] || [ "$choice2" = "Y"]] ; then
     execute_loop=true
 fi
 
