@@ -53,4 +53,4 @@ If you have any questions, suggestions, or feedback, feel free to reach out to m
 I'm open to collaboration and always eager to hear from fellow developers and security enthusiasts!
 
 ---
-Made with 🖤 by Moxit.
+Made with ❤️ by Moxit.
