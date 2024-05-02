@@ -25,7 +25,7 @@ cd SubLog
 ```
 2. Set executable permissions:
 ```python
-chmod +x *.sh
+sudo chmod +x *.sh
 ```
 3. Run `setup.sh` to install dependencies:
 ```python
