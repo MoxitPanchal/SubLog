@@ -89,9 +89,11 @@ sudo subfinder  -silent  -d $domain | sudo tee subfinder.tmp.txt > /dev/null
 echo
 # Step 3: Perform subdomain brute-force with puredns
 echo -e  "${BLUE}[3]${NC}  ${YELLOW}Subdomain bruteforce using puredns.${NC}"
+# Variable for puredns loop
 brute=false
 echo -n -e "${PURPLE}[+]${NC}  ${CYAN}Do you want to Bruteforce?${NC} ${RED}(It will take time)${NC} (y/N): " 
 read choice1
+
 if [ "$choice1" = "y" ] || [ "$choice1" = "Y" ]; then
     brute=true
 fi
@@ -145,8 +147,6 @@ if $brute; then
     sudo rm -f puredns-file-*
 fi
 
-
-
 # Step 4: Find subdomains using crt.sh
 echo
 echo -e "${BLUE}[4]${NC} ${YELLOW} Extracting subdomains from crt.sh.${NC}"
@@ -155,7 +155,7 @@ curl -s "https://crt.sh/?q=%.$domain&output=json" | jq -r '.[].name_value' | sed
 
 # Step 5: Make a list of all unique subdomains from the temporary files
 echo -e -n "${BLUE}[5]${NC} ${YELLOW} Combining all subdomains in subdomains.txt${NC}"
-
+#Combine puredns file depends upon brute variable
 if $brute; then
     cat sublist3r.tmp.txt subfinder.tmp.txt  puredns.tmp.txt crtsh.tmp.txt| sort | uniq |sudo tee subdomains.txt > /dev/null
 else
@@ -166,9 +166,10 @@ echo -e "${PURPLE}[+]${NC} ${YELLOW} Found subdomains are saved in subdomains.tx
 # Step 6: Perform port scanning with naabu
 echo
 echo -e "${BLUE}[6]${NC} ${YELLOW} Scanning ports on each subdomain using naabu${NC}"
-
+# Variable for naabu loop
 execute_loop=false
 
+#Port scan choice
 echo -n -e "${PURPLE}[+]${NC}  ${CYAN}Do you want to scan ports on each subdomain?${NC} ${RED}(It will take time)${NC} (y/N): " 
 read choice2
 
@@ -178,6 +179,7 @@ fi
 
 if $execute_loop; then 
     echo -e "${PURPLE}[+]${NC}  ${CYAN}Enter the ports or range of ports you want to scan separated by comma or dash.${NC}" 
+    #Port range choice
     echo -n -e "${RED}Example. 80,443,8080... or 1-65535. Leave it blank if you want to scan for common ports only.${NC}: " 
     read ports
     echo
