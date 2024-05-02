@@ -172,8 +172,11 @@ fi
 echo -e "${BLUE}[7]${NC} ${YELLOW} Checking accessibilty of found subdomains with curl.${NC}"
 echo
 # Define input file containing subdomains and ports
-INPUT_FILE="subdomain-port.tmp.txt"
-
+if $execute_loop; then
+    INPUT_FILE="subdomain-port.tmp.txt"
+    else 
+    INPUT_FILE="subdomains.txt"
+fi
 # Define output files for HTTP and HTTPS accessible subdomains
 HTTP_OUTPUT_FILE="http_accessible.txt"
 HTTPS_OUTPUT_FILE="https_accessible.txt"
