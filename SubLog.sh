@@ -165,7 +165,7 @@ if $execute_loop; then
     echo -n -e "${RED}Example. 80,443,8080... or 1-65535. Leave it blank if you want to scan for common ports only.${NC}: " 
     read ports
     echo
-    if [ -z"$ports" ]; then
+    if [ -z "$ports" ]; then
         naabu -silent -c 50 -l subdomains.txt | sudo tee subdomain-port.tmp.txt > /dev/null
     else
         naabu -silent -c 50 -l subdomains.txt -p "$ports" | sudo tee subdomain-port.tmp.txt > /dev/null
