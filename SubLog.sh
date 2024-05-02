@@ -196,7 +196,7 @@ while IFS= read -r subdomainwithport; do
     # Check HTTP accessibility
     response_code=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 10 --max-time 20 "http://$subdomainwithport")
     if [[ $response_code == 2* || $response_code == 3* ]]; then
-        sudo sh -c 'echo "$subdomainwithport" >> "$HTTP_OUTPUT_FILE"'
+        echo "$subdomainwithport" | sudo tee -a "$HTTP_OUTPUT_FILE" > /dev/null
         echo -e "${GREEN}HTTP access successful${NC}"
     else
         echo -e "${RED}HTTP access failed${NC}"
@@ -205,7 +205,7 @@ while IFS= read -r subdomainwithport; do
     # Check HTTPS accessibility
     response_code=$(curl -s -o /dev/null -w "%{http_code}" --connect-timeout 10 --max-time 20 "https://$subdomainwithport")
     if [[ $response_code == 2* || $response_code == 3* ]]; then
-        sudo sh -c 'echo "$subdomainwithport" >> "$HTTPS_OUTPUT_FILE"'
+        echo "$subdomainwithport" | sudo tee -a "$HTTPS_OUTPUT_FILE"
         echo -e "${GREEN}HTTPS access successful${NC}"
     else
         echo -e "${RED}HTTPS access failed${NC}"
@@ -254,7 +254,7 @@ while IFS= read -r http_subdomain; do
 done < "$HTTP_OUTPUT_FILE"
 
 # Remove redirected URLs from the final HTTP list
-sudo sh -c 'awk '\''NR==FNR{a[$0];next} !($0 in a)'\'' <(printf '%s\n' "${redirected_urls[@]}") "$HTTP_OUTPUT_FILE" > "$FINAL_HTTP_OUTPUT_FILE"'
+sudo awk 'NR==FNR{a[$0];next} !($0 in a)' <(printf '%s\n' "${redirected_urls[@]}") "$HTTP_OUTPUT_FILE" | sudo tee -a "$FINAL_HTTP_OUTPUT_FILE" > /dev/null
 echo
 echo -e "${PURPLE}Final HTTP accessible subdomains saved to '$FINAL_HTTP_OUTPUT_FILE'"
 echo -e
