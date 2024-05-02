@@ -39,10 +39,9 @@ sudo rm -rf massdns
 
 # Install puredns
 go install github.com/d3mondev/puredns/v2@latest
-export PATH=$PATH:~/go/bin
-sleep 3
-sudo cp -r /root/go $HOME/
-export PATH=$PATH:/usr/local/go/bin:~/go/bin
+echo "export PATH=$PATH:~/go/bin" >> ~/.zshrc
+source ~/.zshrc
+
 if ! command -v puredns &> /dev/null; then
     echo "Error installing puredns!"
 else
