@@ -249,7 +249,7 @@ while IFS= read -r http_subdomain; do
 done < "$HTTP_OUTPUT_FILE"
 
 # Remove redirected URLs from the final HTTP list
-sudo sh -c 'awk 'NR==FNR{a[$0];next} !($0 in a)' <(printf '%s\n' "${redirected_urls[@]}") "$HTTP_OUTPUT_FILE" > "$FINAL_HTTP_OUTPUT_FILE"'
+sudo sh -c 'awk '\''NR==FNR{a[$0];next} !($0 in a)'\'' <(printf '%s\n' "${redirected_urls[@]}") "$HTTP_OUTPUT_FILE" > "$FINAL_HTTP_OUTPUT_FILE"'
 echo
 echo -e "${PURPLE}Final HTTP accessible subdomains saved to '$FINAL_HTTP_OUTPUT_FILE'"
 echo -e
