@@ -30,7 +30,7 @@ if ! command -v naabu &> /dev/null; then
     go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
     export PATH=$PATH:~/go/bin
     
-     if ! command -v naabu &> /dev/null; then
+    if ! command -v naabu &> /dev/null; then
     echo "Error installing naabu!"
     else
     echo "Naabu installed successfully"
