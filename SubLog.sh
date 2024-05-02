@@ -92,7 +92,7 @@ echo -e  "${BLUE}[3]${NC} ${YELLOW}Subdomain bruteforce using puredns.${NC}"
 brute=false
 echo -n -e "${PURPLE}[+]${NC}${CYA}Do you want to Bruteforce?${NC} ${RED}(It will take time)${NC} (y/N): " 
 read choice1
-if [[ "$choice1" = "y"] || [ "$choice1" = "Y"]]; then
+if [ "$choice1" = "y" ] || [ "$choice1" = "Y" ]; then
     brute=true
 fi
 
