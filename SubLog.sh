@@ -86,13 +86,17 @@ echo
 echo -e -n "${BLUE}[2]${NC} ${YELLOW}Finding subdomains with subfinder.${NC}"
 echo
 sudo subfinder  -silent  -d $domain | sudo tee subfinder.tmp.txt > /dev/null
-
+echo
 # Step 3: Perform subdomain brute-force with puredns
+echo -e  "${BLUE}[3]${NC} ${YELLOW}Subdomain bruteforce using puredns.${NC}"
+brute=false
 echo -n -e "${PURPLE}[+]${NC}${CYA}Do you want to Bruteforce?${NC} ${RED}(It will take time)${NC} (y/N): " 
 read choice1
-if [[ "$choice1" = "y"] || [ "$choice1" = "Y"]] ; then
-    echo
-    echo -e  "${BLUE}[3]${NC} ${YELLOW}Subdomain bruteforce using puredns.${NC}"
+if [[ "$choice1" = "y"] || [ "$choice1" = "Y"]]; then
+    brute=true
+fi
+
+if $brute; then    
     echo -e "${RED}NOTE: ${NC}This might take some time (30-35 mins)."
     # Check if the custom wordlist file exists
     if [ -f "$wordlist" ]; then
@@ -137,8 +141,6 @@ if [[ "$choice1" = "y"] || [ "$choice1" = "Y"]] ; then
             fi
         done
     fi
-else
-    break
 fi
 
 cat puredns-file-* | sort | uniq | sudo tee puredns.tmp.txt > /dev/null
