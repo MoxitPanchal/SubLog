@@ -70,7 +70,7 @@ fi
 
 # Check if folder exists, if not create it
 if [ ! -d "$folder_name" ]; then
-    mkdir "$folder_name"
+   sudo mkdir "$folder_name"
 fi
 
 # Change to the folder directory
@@ -97,7 +97,7 @@ echo -e "${RED}NOTE: ${NC}This might take some time (30-35 mins)."
 if [ -f "$wordlist" ]; then
 
     # Create a directory to store the divided wordlists
-    mkdir -p divided_wordlists
+    sudo mkdir -p divided_wordlists
     
     # Split the custom wordlist into 10 parts
     split -n 10 "$wordlist" divided_wordlists/part-
