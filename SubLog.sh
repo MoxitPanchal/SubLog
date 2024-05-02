@@ -105,7 +105,7 @@ if [ -f "$wordlist" ]; then
         if [ -f "$list" ]; then
           counter=$((counter + 1))
           # Run PureDNS command with the current divided wordlist
-          puredns -q bruteforce --rate-limit-trusted 0 --resolvers-trusted ../resolv.txt "$list" --trusted-only "$domain" | sudo tee "puredns-file-${counter}.txt"
+          puredns -q bruteforce --rate-limit-trusted 0 --resolvers-trusted ../resolv.txt "$list" --trusted-only "$domain" | sudo tee "puredns-file-${counter}.txt" > /dev/null
           # Print message indicating completion
           echo
           echo -e "${YELLOW}[+]${NC} ${GREEN}Subdomain bruteforce with divided wordlist $list completed. 🗸${NC}"
@@ -125,7 +125,7 @@ else
         if [ -f "$list" ]; then
             counter=$((counter + 1))
             # Run PureDNS command with the current file
-            puredns -q bruteforce --rate-limit-trusted 0 --resolvers-trusted ../resolv.txt "$list" --trusted-only "$domain" | sudo tee "puredns-file-${counter}.txt"
+            puredns -q bruteforce --rate-limit-trusted 0 --resolvers-trusted ../resolv.txt "$list" --trusted-only "$domain" | sudo tee "puredns-file-${counter}.txt" > /dev/null
             # Print message indicating completion
             echo
             echo -e "${YELLOW}[+]${NC} ${GREEN}Subdomain bruteforce wordlist ${counter} completed. 🗸${NC}"
