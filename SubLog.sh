@@ -115,7 +115,7 @@ if [ -f "$wordlist" ]; then
     done
 
     # Remove the divided wordlists
-    rm -rf divided_wordlists
+    sudo rm -rf divided_wordlists
 else
     # Iterate over each file in the folder
     counter=0
