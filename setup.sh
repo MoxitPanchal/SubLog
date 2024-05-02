@@ -28,6 +28,13 @@ fi
 if ! command -v naabu &> /dev/null; then
     # Install naabu
     go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
+    export PATH=$PATH:~/go/bin
+    
+     if ! command -v naabu &> /dev/null; then
+    echo "Error installing naabu!"
+    else
+    echo "Naabu installed successfully"
+    fi
 else
     echo "Naabu is already installed."
 fi
@@ -42,13 +49,14 @@ if ! command -v puredns &> /dev/null; then
 
     # Install puredns
     go install github.com/d3mondev/puredns/v2@latest
-    echo "export PATH=$PATH:~/go/bin" >> ~/.zshrc
+    echo "export PATH=$PATH" >> ~/.zshrc
     source ~/.zshrc
 
     if ! command -v puredns &> /dev/null; then
     echo "Error installing puredns!"
     else
     echo "Puredns installed successfully"
+    fi
 else
     echo "Puredns is already installed."
 fi
