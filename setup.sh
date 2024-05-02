@@ -25,30 +25,30 @@ if ! command -v go &> /dev/null; then
 else
     echo "Go is already installed."
 fi
-
-# Install naabu
-go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
-
-# Install massdns
-sudo git clone https://github.com/blechschmidt/massdns.git
-cd massdns
-sudo make
-sudo cp -r bin/* /usr/local/bin/
-cd ..
-sudo rm -rf massdns
-
-# Install puredns
-go install github.com/d3mondev/puredns/v2@latest
-echo "export PATH=$PATH:~/go/bin" >> ~/.zshrc
-source ~/.zshrc
-
-if ! command -v puredns &> /dev/null; then
-    echo "Error installing puredns!"
-else
-    echo "Puredns installed successfully"
-fi
 if ! command -v naabu &> /dev/null; then
-    echo "Error installing naabu!"
+    # Install naabu
+    go install -v github.com/projectdiscovery/naabu/v2/cmd/naabu@latest
 else
-    echo "Naabu installed successfully"    
+    echo "Naabu is already installed."
+fi
+if ! command -v puredns &> /dev/null; then
+    # Install massdns
+    sudo git clone https://github.com/blechschmidt/massdns.git
+    cd massdns
+    sudo make
+    sudo cp -r bin/* /usr/local/bin/
+    cd ..
+    sudo rm -rf massdns
+
+    # Install puredns
+    go install github.com/d3mondev/puredns/v2@latest
+    echo "export PATH=$PATH:~/go/bin" >> ~/.zshrc
+    source ~/.zshrc
+
+    if ! command -v puredns &> /dev/null; then
+    echo "Error installing puredns!"
+    else
+    echo "Puredns installed successfully"
+else
+    echo "Puredns is already installed."
 fi
