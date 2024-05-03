@@ -31,7 +31,7 @@ sudo chmod +x *.sh
 ```python
 ./setup.sh
 ```
-3.1. Add go binaries to PATH:
+3.1. Add Go binaries to PATH:
 ```sh
 export PATH=$PATH:~/go/bin
 ```
