@@ -31,11 +31,11 @@ sudo chmod +x *.sh
 ```python
 ./setup.sh
 ```
-3.1. Add Go binaries to PATH:
+4. Add Go binaries to PATH:
 ```sh
 export PATH=$PATH:~/go/bin
 ```
-4. Run `SubLog.sh`:
+5. Run `SubLog.sh`:
 ```sh
 ./SubLog.sh <domain>
 ```
