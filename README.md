@@ -18,7 +18,7 @@
 ```python
 git clone https://github.com/MoxitPanchal/SubLog.git
 ```
-# Running SubLog
+# Using SubLog
 1. Navigate to the SubLog directory:
 ```python
 cd SubLog
