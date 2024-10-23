@@ -184,7 +184,7 @@ if $execute_loop; then
     read ports
     echo
     if [ -z "$ports" ]; then
-        naabu -silent -c 50 -l subdomains.txt -pf nmap-top-1000-ports.txt | sudo tee subdomain-port.tmp.txt > /dev/null
+        naabu -silent -c 50 -l subdomains.txt -pf ../nmap-top-1000-ports.txt | sudo tee subdomain-port.tmp.txt > /dev/null
     else
         naabu -silent -c 50 -l subdomains.txt -p "$ports" | sudo tee subdomain-port.tmp.txt > /dev/null
     fi
