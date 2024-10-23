@@ -79,7 +79,7 @@ cd "$folder_name" || exit 1
 # Step 1: Find subdomains using sublist3r
 echo
 echo -e  "${BLUE}[1]${NC}  ${YELLOW}Finding subdomains with sublist3r.${NC}"
-sudo python -c "import sublist3r;subdomains = sublist3r.main('$domain', 50, 'sublist3r.tmp.txt' ,ports= None, silent=True, verbose= False, enable_bruteforce= False, engines=None)"
+sudo python3 -c "import sublist3r;subdomains = sublist3r.main('$domain', 50, 'sublist3r.tmp.txt' ,ports= None, silent=True, verbose= False, enable_bruteforce= False, engines=None)"
 
 # Step 2: Find subdomains using subfinder
 echo
