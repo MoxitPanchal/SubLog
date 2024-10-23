@@ -18,7 +18,7 @@
 ```python
 git clone https://github.com/MoxitPanchal/SubLog.git
 ```
-# Running SubLog
+# Using SubLog
 1. Navigate to the SubLog directory:
 ```python
 cd SubLog
@@ -31,7 +31,11 @@ sudo chmod +x *.sh
 ```python
 ./setup.sh
 ```
-4. Run `SubLog.sh`:
+4. Add Go binaries to PATH:
+```sh
+export PATH=$PATH:~/go/bin
+```
+5. Run `SubLog.sh`:
 ```sh
 ./SubLog.sh <domain>
 ```
@@ -53,4 +57,4 @@ If you have any questions, suggestions, or feedback, feel free to reach out to m
 I'm open to collaboration and always eager to hear from fellow developers and security enthusiasts!
 
 ---
-Made with ❤ by Moxit.
+Made with 🖤 by Moxit.
