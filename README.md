@@ -52,9 +52,8 @@ SubLog was created with the aim of simplifying the everyday task of subdomain en
 If you have any questions, suggestions, or feedback, feel free to reach out to me:
 
 - Email: [edu.moxit@gmail.com](mailto:edu.moxit@gmail.com)
-- LinkedIn: [Moxit Panchal](https://www.linkedin.com/in/moxit-panchal-545303225/)
+- LinkedIn: [Moxit Panchal](https://www.linkedin.com/in/moxitpanchal/)
 
 I'm open to collaboration and always eager to hear from fellow developers and security enthusiasts!
 
 ---
-Made with 🖤 by Moxit.
