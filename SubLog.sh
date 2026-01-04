@@ -85,7 +85,7 @@ sudo python3 -c "import sublist3r;subdomains = sublist3r.main('$domain', 50, 'su
 echo
 echo -e -n "${BLUE}[2]${NC}  ${YELLOW}Finding subdomains with subfinder.${NC}"
 echo
-sudo subfinder  -silent  -d $domain | sudo tee subfinder.tmp.txt > /dev/null
+sudo subfinder  -recursive -silent  -d $domain | sudo tee subfinder.tmp.txt > /dev/null
 echo
 # Step 3: Perform subdomain brute-force with puredns
 echo -e  "${BLUE}[3]${NC}  ${YELLOW}Subdomain bruteforce using puredns.${NC}"
